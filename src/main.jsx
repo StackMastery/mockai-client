@@ -10,7 +10,22 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthContextProvider>
       <RouterProvider router={router} />
-      <Toaster />
+      <Toaster 
+        position="bottom-center"
+        toastOptions={{
+          className: "!shadow-none border !py-1",
+          success: {
+            style:{
+              border: '1px solid #62d346'
+            }
+          },
+          error: {
+            style: {
+              border: '1px solid #f05858a8'
+            },
+          },
+        }}
+      />
     </AuthContextProvider>
   </StrictMode>,
 )

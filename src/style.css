@@ -11,3 +11,13 @@
         --radius: 0.5rem;
     }
 }
+
+.inputClassHero{
+    box-shadow: 0px 10px 50px 0px rgba(52, 104, 240, 0.20);
+}
+
+@media (max-width: 768px){
+    .br{
+        display: none;
+    }
+}

@@ -30,20 +30,24 @@ const Auth = () => {
     const HandelGoogle = () => {
         signInWithPopup(auth, GoogleProvider)
             .then((res) =>  {
-                HandelAuthSucces({user: res?.user})
+                return HandelAuthSucces({user: res?.user})
             })
             .catch((err) => {
-                toast.error(firebaseErrorMessages[err.code])
+                if(err.code !== firebaseErrorMessages[err.code]){
+                    toast.error(firebaseErrorMessages[err.code])
+                }
             })
     }
 
     const HandelGithub = () => {
         signInWithPopup(auth, GithubProvider)
             .then((res) => {
-                HandelAuthSucces({user: res?.user})
+                return HandelAuthSucces({user: res?.user})
             })
             .catch((err) => {
-                toast.error(firebaseErrorMessages[err.code])
+                if(err.code !== firebaseErrorMessages[err.code]){
+                    toast.error(firebaseErrorMessages[err.code])
+                }
             })
     } 
 
@@ -90,7 +94,8 @@ const Auth = () => {
                                 </div>
                                 <p className="pt-5 text-xs text-neutral-600">By continuing, you agree to MockAi <Link className="text-primary-1">Terms of Use.</Link> Read our <Link className="text-primary-1">Privacy Policy.</Link></p>
                             </div>
-                            <div className="w-full md:w-5/12 bg-cover bg-center bg-no-repeat rounded-r-xl" style={{backgroundImage: `url('${AuthImage}')`}}>
+                            <div className="w-full md:w-5/12 bg-cover bg-slate-200 bg-gradient-to-r bg-center bg-no-repeat rounded-r-xl" style={{backgroundImage: `url('${AuthImage}')`}}>
+                                
                             </div>
                         </motion.div>
                     </div>

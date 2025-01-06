@@ -20,14 +20,14 @@ const Header = () => {
 
     return (
         <>
-            <header className="w-full fixed flex justify-center backdrop-blur">
+            <header className="w-full fixed flex justify-center backdrop-blur z-[9999999999999999999999999999]">
                 <div className="w-primary p-5 inline-flex justify-between items-center">
                     <Link to={'/'}>
                         <img width={150} src={logoURI} alt="MockAi" />
                     </Link>
                     <motion.nav 
                         className={`fixed w-full left-0 px-5 top-20 ${menuIsOpen ? 'block' : 'hidden'} xl:!block xl:static xl:w-fit`}>
-                        <ul className="flex text-[16px] font-semibold backdrop-blur p-5 rounded-xl border flex-col xl:flex-row xl:backdrop-blur-0 xl:p-0 xl:border-none xl:gap-8">
+                        <ul className="flex text-[16px] font-semibold backdrop-blur bg-gradient-to-br bg-white p-5 rounded-xl border flex-col xl:flex-row xl:bg-transparent xl:p-0 xl:border-none xl:gap-8">
                             {NavData && NavData.map((li, index) => (
                                 <NavLink 
                                 to={li?.path}
