@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    outline: none;
+}
+
+@layer base {
+  :root {
+        --radius: 0.5rem;
+    }
+}
