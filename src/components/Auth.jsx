@@ -1,40 +1,68 @@
 import { AnimatePresence, motion } from "motion/react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthImage from '@/assets/auth.png'
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { IoMdClose } from "react-icons/io"; 
 import { FaGithub } from "react-icons/fa";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { auth } from "@/firebase.config";
+import toast from "react-hot-toast";
+import firebaseErrorMessages from "@/firebase.errors";
+import { AuthContext } from "@/context/Auth.Context";
 
 const Auth = () => {
 
     const { search } = useLocation()
     const [isAuthenticating, setisAuthenticating] = useState(false)
+    const navigate = useNavigate()
+    const { isLoading ,authInfo , setauthInfo } = useContext(AuthContext)
 
     const GoogleProvider = new GoogleAuthProvider()
     const GithubProvider = new GithubAuthProvider()
 
+    const HandelAuthSucces = ({user}) => {
+        navigate(-1)
+        toast.success('Authentication Succesfull')
+        setauthInfo(user)
+    }
+
     const HandelGoogle = () => {
         signInWithPopup(auth, GoogleProvider)
             .then((res) =>  {
-                console.log(res)
+                HandelAuthSucces({user: res?.user})
+            })
+            .catch((err) => {
+                toast.error(firebaseErrorMessages[err.code])
             })
     }
 
-    if(search === '?authpopup'){
+    const HandelGithub = () => {
+        signInWithPopup(auth, GithubProvider)
+            .then((res) => {
+                HandelAuthSucces({user: res?.user})
+            })
+            .catch((err) => {
+                toast.error(firebaseErrorMessages[err.code])
+            })
+    } 
+
+    if(isLoading){
+        return ''
+    }
+
+    if(!authInfo && search === '?authpopup'){
         return (
             <AnimatePresence>
                 <section 
                     className="flex justify-center w-full fixed top-0">
                     <div 
-                        className="h-screen py-40 w-full items-center flex justify-center backdrop-blur-sm bg-black/20 px-5">
+                        className="h-screen py-80 w-full items-center flex justify-center backdrop-blur-sm bg-black/20 px-5">
                         <motion.div 
                             initial={{scale: 0.5, opacity: 0}}
                             animate={{scale: 1, opacity: 1}}
                             className="bg-white flex w-full md:w-9/12 xl:w-[800px] rounded-xl flex-col md:flex-row">
-                            <div className="w-full p-10 md:w-6/12">
+                            <div className="w-full p-10 md:w-7/12">
                                 <div className="w-full flex absolute -mt-20 -ml-10">
                                     <Link to={-1}>
                                         <span className="bg-black/10 rounded-full p-1 flex">
@@ -53,14 +81,16 @@ const Auth = () => {
                                         <FcGoogle size={21}/>
                                         Continue with Google
                                     </AuthButton>
-                                    <AuthButton disabled={isAuthenticating}>
+                                    <AuthButton 
+                                        onClick={HandelGithub}
+                                        disabled={isAuthenticating}>
                                         <FaGithub size={21}/>
                                         Continue with Github
                                     </AuthButton>
                                 </div>
                                 <p className="pt-5 text-xs text-neutral-600">By continuing, you agree to MockAi <Link className="text-primary-1">Terms of Use.</Link> Read our <Link className="text-primary-1">Privacy Policy.</Link></p>
                             </div>
-                            <div className="w-full md:w-6/12 bg-cover bg-center bg-no-repeat rounded-r-xl" style={{backgroundImage: `url('${AuthImage}')`}}>
+                            <div className="w-full md:w-5/12 bg-cover bg-center bg-no-repeat rounded-r-xl" style={{backgroundImage: `url('${AuthImage}')`}}>
                             </div>
                         </motion.div>
                     </div>
